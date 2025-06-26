@@ -1,0 +1,195 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Richmond",
+        "price_sqm": 9500
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9850, -37.8250],
+            [144.9950, -37.8250],
+            [144.9950, -37.8350],
+            [144.9850, -37.8350],
+            [144.9850, -37.8250]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "South Yarra",
+        "price_sqm": 12000
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9800, -37.8400],
+            [144.9900, -37.8400],
+            [144.9900, -37.8500],
+            [144.9800, -37.8500],
+            [144.9800, -37.8400]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brunswick",
+        "price_sqm": 7800
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9600, -37.7700],
+            [144.9700, -37.7700],
+            [144.9700, -37.7800],
+            [144.9600, -37.7800],
+            [144.9600, -37.7700]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Footscray",
+        "price_sqm": 6500
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.8900, -37.8000],
+            [144.9000, -37.8000],
+            [144.9000, -37.8100],
+            [144.8900, -37.8100],
+            [144.8900, -37.8000]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Toorak",
+        "price_sqm": 15000
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [145.0100, -37.8400],
+            [145.0200, -37.8400],
+            [145.0200, -37.8500],
+            [145.0100, -37.8500],
+            [145.0100, -37.8400]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Carlton",
+        "price_sqm": 8900
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9600, -37.7900],
+            [144.9700, -37.7900],
+            [144.9700, -37.8000],
+            [144.9600, -37.8000],
+            [144.9600, -37.7900]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "St Kilda",
+        "price_sqm": 10200
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9700, -37.8600],
+            [144.9800, -37.8600],
+            [144.9800, -37.8700],
+            [144.9700, -37.8700],
+            [144.9700, -37.8600]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Williamstown",
+        "price_sqm": 8700
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.8800, -37.8600],
+            [144.8900, -37.8600],
+            [144.8900, -37.8700],
+            [144.8800, -37.8700],
+            [144.8800, -37.8600]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Coburg",
+        "price_sqm": 5800
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9600, -37.7400],
+            [144.9700, -37.7400],
+            [144.9700, -37.7500],
+            [144.9600, -37.7500],
+            [144.9600, -37.7400]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hawthorn",
+        "price_sqm": 9800
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [145.0200, -37.8200],
+            [145.0300, -37.8200],
+            [145.0300, -37.8300],
+            [145.0200, -37.8300],
+            [145.0200, -37.8200]
+          ]
+        ]
+      }
+    }
+  ]
+}

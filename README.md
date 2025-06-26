@@ -1,4 +1,25 @@
-# Getting Started with Create React App
+# Melbourne $/SQM
+
+An interactive map visualization of property prices per square meter across Melbourne and Victoria suburbs.
+
+## Overview
+
+This project provides a visual representation of property prices across Victoria suburbs using a color-coded heatmap. Each suburb is displayed with clear boundaries and colored according to its property price per square meter, allowing users to quickly identify price trends and compare different areas.
+
+## Features
+
+- **Interactive Map**: Navigate and explore Victoria suburbs with an intuitive map interface
+- **Color-Coded Heatmap**: Suburbs are colored based on their property price per square meter
+- **Suburb Information**: Click on any suburb to view its name and price per square meter
+- **Responsive Legend**: Clear legend showing the price range for each color
+- **Hover Highlighting**: Suburbs are highlighted when hovered over for better visibility
+
+## Technologies Used
+
+- React
+- TypeScript
+- Leaflet / React-Leaflet for map visualization
+- GeoJSON for suburb boundary data
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

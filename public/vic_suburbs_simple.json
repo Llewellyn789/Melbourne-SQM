@@ -1,0 +1,195 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Melbourne",
+        "name": "Melbourne"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9431, -37.8136],
+            [144.9731, -37.8136],
+            [144.9731, -37.8436],
+            [144.9431, -37.8436],
+            [144.9431, -37.8136]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "South Yarra",
+        "name": "South Yarra"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9831, -37.8336],
+            [145.0131, -37.8336],
+            [145.0131, -37.8636],
+            [144.9831, -37.8636],
+            [144.9831, -37.8336]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Richmond",
+        "name": "Richmond"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9931, -37.8136],
+            [145.0231, -37.8136],
+            [145.0231, -37.8436],
+            [144.9931, -37.8436],
+            [144.9931, -37.8136]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Carlton",
+        "name": "Carlton"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9531, -37.7936],
+            [144.9831, -37.7936],
+            [144.9831, -37.8236],
+            [144.9531, -37.8236],
+            [144.9531, -37.7936]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Fitzroy",
+        "name": "Fitzroy"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9731, -37.7936],
+            [145.0031, -37.7936],
+            [145.0031, -37.8236],
+            [144.9731, -37.8236],
+            [144.9731, -37.7936]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "St Kilda",
+        "name": "St Kilda"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9631, -37.8536],
+            [144.9931, -37.8536],
+            [144.9931, -37.8836],
+            [144.9631, -37.8836],
+            [144.9631, -37.8536]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Brunswick",
+        "name": "Brunswick"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9531, -37.7636],
+            [144.9831, -37.7636],
+            [144.9831, -37.7936],
+            [144.9531, -37.7936],
+            [144.9531, -37.7636]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Footscray",
+        "name": "Footscray"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.8831, -37.7936],
+            [144.9131, -37.7936],
+            [144.9131, -37.8236],
+            [144.8831, -37.8236],
+            [144.8831, -37.7936]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Docklands",
+        "name": "Docklands"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9231, -37.8136],
+            [144.9531, -37.8136],
+            [144.9531, -37.8436],
+            [144.9231, -37.8436],
+            [144.9231, -37.8136]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "vic_loca_2": "Southbank",
+        "name": "Southbank"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [144.9531, -37.8236],
+            [144.9831, -37.8236],
+            [144.9831, -37.8536],
+            [144.9531, -37.8536],
+            [144.9531, -37.8236]
+          ]
+        ]
+      }
+    }
+  ]
+}
