@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import VicSuburbMap from './VicSuburbMap';
+import RealDataMap from './RealDataMap';
 
 function App() {
   return (
     <div className="App">
-      <VicSuburbMap />
+      <RealDataMap />
     </div>
   );
 }
