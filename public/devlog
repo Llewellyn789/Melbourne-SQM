@@ -6,3 +6,11 @@
 - only other function would be median house price, lot size data
 and having data in sheets so it updates each quarter
 
+ok stage one done
+stage 2
+- get all suburbs working
+- adjust colour gradient - 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-10, 10+
+- ship!
+
+
+priority is gradient now, then getting other suburbs working, then fix ESLint error

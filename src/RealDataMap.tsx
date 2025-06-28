@@ -49,7 +49,6 @@ const RealDataMap: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dataProcessed, setDataProcessed] = useState(false);
-  const [showOnlyWithData, setShowOnlyWithData] = useState(false);
   const [matchedCount, setMatchedCount] = useState(0);
 
   // Load CSV data
@@ -83,14 +82,11 @@ const RealDataMap: React.FC = () => {
   // Load GeoJSON data
   useEffect(() => {
     fetch('/vic_suburbs.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to load GeoJSON data');
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log('Loaded GeoJSON data');
+        // Log some suburb names for debugging
+        console.log('Sample GeoJSON suburb names:', 
+          data.features.slice(0, 10).map((f: any) => f.properties.vic_loca_2 || f.properties.name || f.properties.VIC_LOCA_2));
         setGeoJSONData(data);
       })
       .catch(err => {
@@ -106,6 +102,33 @@ const RealDataMap: React.FC = () => {
       console.log('Total suburbs in CSV:', suburbData.length);
       console.log('Total features in GeoJSON:', geoJSONData.features.length);
       
+      // Create a map of suburb names to their data for faster lookup
+      const suburbMap: Record<string, any> = {};
+      
+      // Add all suburbs to the map with various key formats for flexible matching
+      suburbData.forEach(suburb => {
+        const name = suburb.Suburb.toLowerCase().trim();
+        suburbMap[name] = suburb;
+        
+        // Add variations without directional prefixes/suffixes
+        const simpleName = name
+          .replace(/^(north|south|east|west|port)\s+/, '')
+          .replace(/\s+(north|south|east|west)$/, '');
+        
+        if (simpleName !== name) {
+          suburbMap[simpleName] = suburb;
+        }
+      });
+      
+      // Add manual mappings for problematic suburbs
+      suburbMap['williamstown'] = suburbData.find(s => s.Suburb.toLowerCase() === 'williamstown');
+      suburbMap['richmond'] = suburbData.find(s => s.Suburb.toLowerCase() === 'richmond');
+      
+      // Debug the map
+      console.log('Created suburb map with keys:', Object.keys(suburbMap).length);
+      console.log('Williamstown in map:', !!suburbMap['williamstown']);
+      console.log('Richmond in map:', !!suburbMap['richmond']);
+      
       // Count how many suburbs we can match
       let matchCount = 0;
       
@@ -113,49 +136,21 @@ const RealDataMap: React.FC = () => {
       const mergedData = {
         ...geoJSONData,
         features: geoJSONData.features.map(feature => {
-          // Get suburb name from feature properties based on vic_suburbs.json structure
-          const suburbName = feature.properties.vic_loca_2 || feature.properties.name || feature.properties.VIC_LOCA_2 || '';
+          // Get suburb name from feature properties
+          const suburbName = feature.properties.vic_loca_2 || 
+                            feature.properties.name || 
+                            feature.properties.VIC_LOCA_2 || '';
           
-          // Normalize suburb name for better matching
-          const normalizedSuburbName = suburbName
-            .toLowerCase()
-            .replace(/\s+/g, ' ')
-            .trim();
+          // Normalize suburb name for lookup
+          const lookupName = suburbName.toLowerCase().trim();
           
-          // Find matching suburb in CSV data
-          const matchingSuburb = suburbData.find(item => {
-            // Normalize CSV suburb name
-            const normalizedItemSuburb = item.Suburb
-              .toLowerCase()
-              .replace(/\s+/g, ' ')
-              .trim();
-            
-            // Try exact match first
-            if (normalizedItemSuburb === normalizedSuburbName) {
-              return true;
-            }
-            
-            // Try partial match (suburb name contains or is contained in)
-            if (normalizedItemSuburb.includes(normalizedSuburbName) || 
-                normalizedSuburbName.includes(normalizedItemSuburb)) {
-              return true;
-            }
-            
-            // Try removing common prefixes/suffixes
-            const simplifiedSuburbName = normalizedSuburbName
-              .replace(/^(north|south|east|west|port)\s+/, '')
-              .replace(/\s+(north|south|east|west)$/, '');
-            
-            const simplifiedItemSuburb = normalizedItemSuburb
-              .replace(/^(north|south|east|west|port)\s+/, '')
-              .replace(/\s+(north|south|east|west)$/, '');
-            
-            if (simplifiedItemSuburb === simplifiedSuburbName) {
-              return true;
-            }
-            
-            return false;
-          });
+          // Debug specific suburbs
+          if (lookupName === 'williamstown' || lookupName === 'richmond') {
+            console.log(`Looking up ${lookupName} in suburb map:`, !!suburbMap[lookupName]);
+          }
+          
+          // Find matching suburb in our map
+          const matchingSuburb = suburbMap[lookupName];
           
           if (matchingSuburb) {
             matchCount++;
@@ -172,7 +167,7 @@ const RealDataMap: React.FC = () => {
                 median_price: medianPrice,
                 block_size: blockSize,
                 lga: lga,
-                matched_suburb: matchingSuburb.Suburb // Store the matched suburb name for debugging
+                matched_suburb: matchingSuburb.Suburb
               }
             };
           }
@@ -198,31 +193,19 @@ const RealDataMap: React.FC = () => {
   // Function to determine color based on price per sqm
   const getColor = (price: number): string => {
     if (!price || isNaN(price)) return '#cccccc'; // Default gray for missing data
-    if (price < 5000) return '#1a9850'; // Dark green
-    if (price < 6000) return '#91cf60'; // Light green
-    if (price < 7000) return '#d9ef8b'; // Yellow-green
-    if (price < 8000) return '#fee08b'; // Light orange
-    if (price < 9000) return '#fc8d59'; // Orange
-    if (price < 10000) return '#d73027'; // Red
-    if (price < 12000) return '#bd0026'; // Dark red
+    if (price < 3000) return '#1a9850'; // Dark green
+    if (price < 4000) return '#91cf60'; // Light green
+    if (price < 5000) return '#d9ef8b'; // Yellow-green
+    if (price < 6000) return '#fee08b'; // Light orange
+    if (price < 7000) return '#fc8d59'; // Orange
+    if (price < 8000) return '#d73027'; // Red
+    if (price < 9000) return '#bd0026'; // Dark red
     return '#800026'; // Very dark red for extremely expensive
   };
 
   // Style function for GeoJSON features
   const featureStyle = (feature: any) => {
     const price = feature.properties.price_sqm;
-    
-    // If showing only suburbs with data, hide those without data
-    if (showOnlyWithData && !price) {
-      return {
-        fillColor: '#cccccc',
-        weight: 1,
-        opacity: 0,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0
-      };
-    }
     
     return {
       fillColor: price ? getColor(price) : '#cccccc',
@@ -259,8 +242,6 @@ const RealDataMap: React.FC = () => {
       const popupContent = `
         <div class="popup-content">
           <h3>${props.vic_loca_2 || props.name || props.VIC_LOCA_2}</h3>
-          <p><strong>LGA:</strong> ${props.lga || 'N/A'}</p>
-          <p><strong>Matched Suburb:</strong> ${props.matched_suburb || 'N/A'}</p>
           <p><strong>Median House Price:</strong> ${props.median_price || 'N/A'}</p>
           <p><strong>Estimated Block Size:</strong> ${props.block_size || 'N/A'} sqm</p>
           <p><strong>Price per sqm:</strong> $${price.toLocaleString()}</p>
@@ -273,9 +254,6 @@ const RealDataMap: React.FC = () => {
   };
 
   // Event handlers for hover and click effects
-  const handleToggleFilter = () => {
-    setShowOnlyWithData(!showOnlyWithData);
-  };
 
   if (loading) {
     return (
@@ -329,24 +307,7 @@ const RealDataMap: React.FC = () => {
         <p style={{ margin: '5px 0 0', fontSize: '14px', color: '#666' }}>Data from Greater Melbourne LGAs property price analysis</p>
       </div>
 
-      {/* Filter toggle */}
-      <div style={{
-        position: 'absolute',
-        top: '60px',
-        right: '20px',
-        zIndex: 1000,
-        background: 'rgba(255,255,255,0.9)',
-        padding: '10px 20px',
-        borderRadius: '5px',
-        boxShadow: '0 0 15px rgba(0,0,0,0.2)',
-        maxWidth: '200px',
-        textAlign: 'center'
-      }}>
-        <label style={{ fontSize: '16px', color: '#333' }}>
-          <input type="checkbox" checked={showOnlyWithData} onChange={handleToggleFilter} />
-          Show only suburbs with data
-        </label>
-      </div>
+      {/* No filter toggle - showing all suburbs by default */}
 
       {/* Map */}
       <div style={{ height: '100vh', width: '100%' }}>
@@ -384,14 +345,14 @@ const RealDataMap: React.FC = () => {
           }}>
             <h4 style={{ margin: '0 0 10px', color: '#333', fontSize: '16px' }}>Price per sqm</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <div><i style={{ background: '#1a9850', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> Less than $5,000</div>
-              <div><i style={{ background: '#91cf60', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $5,000 - $6,000</div>
-              <div><i style={{ background: '#d9ef8b', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $6,000 - $7,000</div>
-              <div><i style={{ background: '#fee08b', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $7,000 - $8,000</div>
-              <div><i style={{ background: '#fc8d59', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $8,000 - $9,000</div>
-              <div><i style={{ background: '#d73027', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $9,000 - $10,000</div>
-              <div><i style={{ background: '#bd0026', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $10,000 - $12,000</div>
-              <div><i style={{ background: '#800026', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> More than $12,000</div>
+              <div><i style={{ background: '#1a9850', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> Under $3,000</div>
+              <div><i style={{ background: '#91cf60', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $3,000 - $4,000</div>
+              <div><i style={{ background: '#d9ef8b', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $4,000 - $5,000</div>
+              <div><i style={{ background: '#fee08b', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $5,000 - $6,000</div>
+              <div><i style={{ background: '#fc8d59', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $6,000 - $7,000</div>
+              <div><i style={{ background: '#d73027', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $7,000 - $8,000</div>
+              <div><i style={{ background: '#bd0026', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $8,000 - $9,000</div>
+              <div><i style={{ background: '#800026', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $10,000+</div>
               <div><i style={{ background: '#cccccc', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> No data</div>
               <div style={{ marginTop: '10px', fontSize: '12px', fontStyle: 'italic' }}>
                 Matched: {matchedCount} of {suburbData.length} suburbs
