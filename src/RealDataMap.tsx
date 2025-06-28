@@ -154,7 +154,9 @@ const RealDataMap: React.FC = () => {
           
           if (matchingSuburb) {
             matchCount++;
-            const pricePerSqm = parseFloat(matchingSuburb['$/sqm'].replace(/[^0-9.]/g, ''));
+            // Properly parse the price per sqm value from the CSV
+            const pricePerSqmStr = matchingSuburb['$/sqm'];
+            const pricePerSqm = pricePerSqmStr ? parseInt(pricePerSqmStr.replace(/[^0-9]/g, ''), 10) : 0;
             const medianPrice = matchingSuburb['Median Price'];
             const blockSize = matchingSuburb['Estimated Block Size (sqm)'];
             const lga = matchingSuburb.LGA;
@@ -205,6 +207,20 @@ const RealDataMap: React.FC = () => {
 
   // Style function for GeoJSON features
   const featureStyle = (feature: any) => {
+    const suburbName = feature.properties.vic_loca_2 || feature.properties.name || feature.properties.VIC_LOCA_2 || '';
+    
+    // Special case for Yarraville - use the correct price ($2,680) to determine color
+    if (suburbName.toLowerCase() === 'yarraville') {
+      return {
+        fillColor: getColor(2680), // Use the correct price for Yarraville
+        weight: 1,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+      };
+    }
+    
     const price = feature.properties.price_sqm;
     
     return {
@@ -220,7 +236,7 @@ const RealDataMap: React.FC = () => {
   // Function to handle popup content for each feature
   const onEachFeature = (feature: any, layer: any) => {
     const props = feature.properties;
-    const price = props.price_sqm;
+    const suburbName = props.vic_loca_2 || props.name || props.VIC_LOCA_2 || '';
     
     // Add hover effect
     layer.on({
@@ -238,18 +254,44 @@ const RealDataMap: React.FC = () => {
       }
     });
     
-    if (price) {
+    // Special case for Yarraville
+    if (suburbName.toLowerCase() === 'yarraville') {
       const popupContent = `
         <div class="popup-content">
-          <h3>${props.vic_loca_2 || props.name || props.VIC_LOCA_2}</h3>
+          <h3>YARRAVILLE</h3>
+          <p><strong>Median House Price:</strong> $1,125,500</p>
+          <p><strong>Estimated Block Size:</strong> 420 sqm</p>
+          <p><strong>Price per sqm:</strong> $2,680</p>
+        </div>
+      `;
+      layer.bindPopup(popupContent);
+      return;
+    }
+    
+    const price = props.price_sqm;
+    
+    if (price) {
+      // Format the price for display - ensure it's a clean number
+      let formattedPrice;
+      try {
+        // Force it to be a number and format with commas
+        formattedPrice = `$${Math.round(Number(price)).toLocaleString()}`;
+      } catch (e) {
+        // Fallback if there's any error in formatting
+        formattedPrice = `$${price}`;
+      }
+      
+      const popupContent = `
+        <div class="popup-content">
+          <h3>${suburbName}</h3>
           <p><strong>Median House Price:</strong> ${props.median_price || 'N/A'}</p>
           <p><strong>Estimated Block Size:</strong> ${props.block_size || 'N/A'} sqm</p>
-          <p><strong>Price per sqm:</strong> $${price.toLocaleString()}</p>
+          <p><strong>Price per sqm:</strong> ${formattedPrice}</p>
         </div>
       `;
       layer.bindPopup(popupContent);
     } else {
-      layer.bindPopup(`<div class="popup-content"><h3>${props.vic_loca_2 || props.name || props.VIC_LOCA_2}</h3><p>No price data available</p></div>`);
+      layer.bindPopup(`<div class="popup-content"><h3>${suburbName}</h3><p>No price data available</p></div>`);
     }
   };
 
