@@ -157,10 +157,21 @@ const RealDataMap: React.FC = () => {
             matchCount++;
             // Properly parse the price per sqm value from the CSV
             const pricePerSqmStr = matchingSuburb['$/sqm'];
-            // Fix: The current regex removes ALL non-numeric characters including decimal points
-            // This causes "$10,900" to be parsed as 10900 instead of 10900.0
-            // Only remove $ and commas, keep decimal points
-            const pricePerSqm = pricePerSqmStr ? parseFloat(pricePerSqmStr.replace(/[$,]/g, '')) : 0;
+            
+            // The issue is that we're parsing the price incorrectly
+            // For example, "$10,900" should be parsed as 10900, not as 10.9
+            // Remove $ and commas, then parse as float
+            let pricePerSqm = 0;
+            if (pricePerSqmStr) {
+              // Remove $ and commas, but keep the decimal point if present
+              const cleanedStr = pricePerSqmStr.replace(/[$,]/g, '');
+              pricePerSqm = parseFloat(cleanedStr);
+              
+              // Debug expensive suburbs
+              if (pricePerSqm > 9000) {
+                console.log(`High-priced suburb: ${matchingSuburb.Suburb}, Original: ${pricePerSqmStr}, Cleaned: ${cleanedStr}, Parsed: ${pricePerSqm}`);
+              }
+            }
             const medianPrice = matchingSuburb['Median Price'];
             const blockSize = matchingSuburb['Estimated Block Size (sqm)'];
             const lga = matchingSuburb.LGA;
@@ -197,6 +208,12 @@ const RealDataMap: React.FC = () => {
   // Function to determine color based on price per sqm
   const getColor = (price: number): string => {
     if (!price || isNaN(price)) return '#cccccc'; // Default gray for missing data
+    
+    // Debug color assignment for expensive suburbs
+    if (price > 9000) {
+      console.log(`Getting color for expensive suburb: price=${price}, returning #800026`);
+    }
+    
     if (price < 3000) return '#1a9850'; // Dark green
     if (price < 4000) return '#91cf60'; // Light green
     if (price < 5000) return '#d9ef8b'; // Yellow-green
@@ -224,6 +241,12 @@ const RealDataMap: React.FC = () => {
     }
     
     const price = feature.properties.price_sqm;
+    
+    // Debug color assignment for expensive suburbs
+    if (price > 9000) {
+      const color = getColor(price);
+      console.log(`Color for ${suburbName}: price=${price}, color=${color}`);
+    }
     
     return {
       fillColor: price ? getColor(price) : '#cccccc',
