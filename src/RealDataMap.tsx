@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -50,6 +50,7 @@ const RealDataMap: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [dataProcessed, setDataProcessed] = useState(false);
   const [matchedCount, setMatchedCount] = useState(0);
+  const [showSources, setShowSources] = useState(false);
 
   // Load CSV data
   useEffect(() => {
@@ -190,8 +191,6 @@ const RealDataMap: React.FC = () => {
     }
   }, [suburbData.length, geoJSONData ? JSON.stringify(geoJSONData.type) : null, dataProcessed]);
   
-  // The dataProcessed state is now declared above
-
   // Function to determine color based on price per sqm
   const getColor = (price: number): string => {
     if (!price || isNaN(price)) return '#cccccc'; // Default gray for missing data
@@ -348,6 +347,61 @@ const RealDataMap: React.FC = () => {
         <h1 style={{ margin: 0, fontSize: '24px' }}>Melbourne Suburbs - Property Prices ($/sqm)</h1>
         <p style={{ margin: '5px 0 0', fontSize: '14px', color: '#666' }}>Data from Greater Melbourne LGAs property price analysis</p>
       </div>
+      
+      {/* Sources Button */}
+      <div style={{
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        zIndex: 1000
+      }}>
+        <button 
+          onClick={() => setShowSources(!showSources)}
+          style={{
+            backgroundColor: '#fff',
+            border: '2px solid rgba(0,0,0,0.2)',
+            borderRadius: '4px',
+            padding: '5px 10px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            boxShadow: '0 1px 5px rgba(0,0,0,0.4)'
+          }}
+        >
+          ℹ️ Sources
+        </button>
+        
+      </div>
+      
+      {/* Sources Popup */}
+      {showSources && (
+        <div style={{
+          position: 'absolute',
+          top: '50px',
+          right: '10px',
+          backgroundColor: 'white',
+          border: '2px solid rgba(0,0,0,0.2)',
+          borderRadius: '5px',
+          padding: '15px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+          zIndex: 1000,
+          maxWidth: '350px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <h3 style={{ margin: '0' }}>Sources:</h3>
+            <button 
+              onClick={() => setShowSources(false)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}
+            >
+              ✕
+            </button>
+          </div>
+          <ul style={{ paddingLeft: '20px', margin: '0' }}>
+            <li>Median house prices as of March 2025 (REIV)</li>
+            <li>Estimated lot sizes based on average for Local Government Areas (Department of Transport & Planning)</li>
+          </ul>
+        </div>
+      )}
 
       {/* No filter toggle - showing all suburbs by default */}
 
@@ -401,6 +455,8 @@ const RealDataMap: React.FC = () => {
               </div>
             </div>
           </div>
+          
+          {/* No custom control needed */}
         </MapContainer>
       </div>
     </div>
