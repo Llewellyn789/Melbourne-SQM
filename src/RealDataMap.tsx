@@ -201,7 +201,7 @@ const RealDataMap: React.FC = () => {
     if (price < 7000) return '#fc8d59'; // Orange
     if (price < 8000) return '#d73027'; // Red
     if (price < 9000) return '#bd0026'; // Dark red
-    return '#800026'; // Very dark red for expensive (>$9,000/sqm)
+    return '#4a0018'; // Very dark red for expensive (>$9,000/sqm)
   };
 
   // Style function for GeoJSON features
@@ -448,7 +448,7 @@ const RealDataMap: React.FC = () => {
               <div><i style={{ background: '#fc8d59', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $6,000 - $7,000</div>
               <div><i style={{ background: '#d73027', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $7,000 - $8,000</div>
               <div><i style={{ background: '#bd0026', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $8,000 - $9,000</div>
-              <div><i style={{ background: '#800026', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $9,000+</div>
+              <div><i style={{ background: '#4a0018', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> $9,000+</div>
               <div><i style={{ background: '#cccccc', display: 'inline-block', width: '18px', height: '18px', marginRight: '8px', border: '1px solid #444' }}></i> No data</div>
               <div style={{ marginTop: '10px', fontSize: '12px', fontStyle: 'italic' }}>
                 Matched: {matchedCount} of {suburbData.length} suburbs
