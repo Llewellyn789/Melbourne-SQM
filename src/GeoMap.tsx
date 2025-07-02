@@ -152,7 +152,7 @@ const GeoMap: React.FC = () => {
         borderRadius: '5px',
         boxShadow: '0 0 15px rgba(0,0,0,0.2)',
       }}>
-        <h1 style={{ margin: 0, fontSize: '24px', textAlign: 'center' }}>Melbourne Suburbs - Property Prices ($/sqm)</h1>
+        <h1 style={{ margin: 0, fontSize: '24px', textAlign: 'center' }}>Melbourne Land Valuation Map</h1>
       </div>
 
       {/* Map */}
