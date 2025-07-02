@@ -371,7 +371,6 @@ const RealDataMap: React.FC = () => {
         textAlign: 'center'
       }}>
         <h1 style={{ margin: 0, fontSize: '24px' }}>Melbourne Land Valuation Map</h1>
-        <p style={{ margin: '5px 0 0', fontSize: '14px', color: '#666' }}>Data from Greater Melbourne LGAs property price analysis</p>
       </div>
       
       {/* Sources Button */}
